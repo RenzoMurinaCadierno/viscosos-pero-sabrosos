@@ -1,0 +1,300 @@
+ES6 
+
+Code Splitting , Server Side Rendering , Dynamic Imports 
+
+webpack - babel 
+
+NPM : Node Package Manager
+npm is not defined 
+
+Instalacion y Setup 
+1) Instalar de manera global el paquete "create-react-app": 
+
+    > npm i -g create-react-app
+
+2) Generar un proyecto de react :
+
+    > create-react-app app
+
+3) Levantar la applicacion : 
+
+    > cd app
+    > npm start 
+
+
+
+
+
+-------------------------------------------------------
+
+1) SIEMPRE! tiene que estar la variable "React" en todos los archivos
+
+CommonJS : 
+
+    const React = require("react")
+
+ES6 Modules : 
+
+    import React from "react"
+
+
+2) Un componente de React es una funcion 
+
+function foo(){}
+
+let foo = () => {}
+
+class foo {}
+
+3) Un componente de react arranca en Mayusucla
+
+let Foo = () => {}
+
+4) Un componente de react SIEMPRE tiene retorno : React.Component , String , DOMElement
+
+let Foo = () => { 
+    return "Hola Mundo" 
+}
+
+
+5) Un componente de react ejecutado se escribe en JSX : 
+
+Foo()  ===  <Foo/>
+
+6) Cada componente puede crear su estado propio local(state) y recibir parametros(props)
+
+7) Si el componente es de tipo Class , la misma tiene que extender a la clase React.Component 
+
+8) El state de un componente se genera adentro de un metodo constructor
+
+9) El state no puede ser modificado por asignacion de variable sino que tenemos que describirle a react cómo se vería el nuevo estado 
+
+let state = 1
+//state = 2 NOOOOO
+
+this.setState({ state : state + 1 }) 
+
+La funcion setState es asincronica entonces un cambio de estado no bloquea el UI
+
+10) El state solo puede ser modificado por aquel componente que lo creó 
+
+----------------------------------------------------
+
+CICLOS DE VIDA : Son metodos que podemos usar en un componente si y solo si el mismo es de tipo class. Se separan en tres grupos 
+
+https://es.reactjs.org/docs/react-component.html
+
+
+mount
+    constructor() = ideal para crear state o para hacer binding de metodos 
+    render() = ideal para generar layout, cuando la app se dibuja
+    componentDidMount() = ideal para subscripciones 
+
+
+
+update (se da cuando un componente recibe nuevos props o cambia su state)
+
+    shouldComponentUpdate() = ideal para chekear props/state y verificar si realmente hay que volver a ejecutar el render
+
+    render() = vuelve a dibujar el componente 
+
+    componentDidUpdate() 
+    
+
+unmount
+    componentWillUnmount() = ideal para cancelar subscripciones
+
+
+----------------------------------------------------
+
+
+PROPS
+
+
+Foo()  ===  <Foo/>
+Foo({a:1,b:3})  ===  <Foo a=1  b=3 />
+
+
+function Foo(props){
+    props.a / props.b
+    let {a:a,b:b} = props
+    let {a,b} = props
+}
+
+function Foo({a,b}){
+   a / b
+}
+
+
+
+Foo({a:1,b:3,c:5,d:6})  ===  <Foo a=1  b=3 c=5 d=6 />
+
+function Foo({a,b,...elResto}){
+    a / b
+    elResto // {c:5,d:6}
+}
+
+
+
+http://es6-features.org/
+
+
+
+----------------------------------------------------
+
+Contexto : El objeto que contiene a la funcion
+
+window.foo = function foo(){}
+var foo = function foo(){}
+function foo(){
+    console.log(this)
+}
+
+window.foo()
+
+
+
+let obj = {
+    fn : function(){
+        console.log(this)
+    }
+}
+
+obj.fn()
+
+
+call / apply / bind / new  = Estas formas de ejecucion nos permiten decidir manualmente QUE QUIERO YO que valga la variable this
+
+function ctx(a,b){
+    console.log(a,b)
+    console.log(this)
+}
+
+ctx() undefined undefined window
+ctx(1,2) 1 2 window
+
+Function.call() :void
+ctx.call() undefined undefined window
+ctx.call({call:true},1,2) 1 2 {call:true}
+
+Function.apply() : void
+ctx.apply() undefined undefined window
+ctx.apply({apply:true},[1,2]) 1 2 {apply:true} 
+
+new Function :this
+new ctx undefined undefined {}
+new ctx(1,2) 1 2 {}
+
+
+Function.bind() Function
+let r = ctx.bind({bind:true},1,2) 
+
+r() 1 2 {bind:true}
+
+https://www.youtube.com/watch?v=PMfcsYzj-9M
+
+----------------------------------------------------
+
+let arr = [1,2,3]
+
+for(let i=0; i<arr.length; i++){
+    let elemento = arr[i]
+}
+
+arr.forEach((elemento,i)=>{}) => :void
+
+arr.map((elemento,i)=>{ return elemento + 1 }) 
+    
+        => Array de igual length 
+
+arr.filter() / arr.sort() / arr.reduce() / 
+
+
+
+----------------------------------------------------
+
+let nombre = "Horacio"
+let saludo = "Hola, soy " + nombre + ", como estas?"
+let saludo = 'Hola, soy ' + nombre + ', como estas?'
+let saludo = `Hola, soy ${nombre}, como estas?`
+----------------------------------------------------
+
+app/
+    |_src/ 
+        |_api/ 
+        |_ui/
+            |_ widgets/
+                |_ Contador.js
+            |_ paginas/
+            |_ layout/ 
+                |_ App.js
+                |_ Header.js
+                |_ Footer.js
+                |_ Main.js
+
+
+api : en esta carpeta suelo tener conexiones a bd, sub a REST apis, Redux 
+ui : en esta carpeta suelo tener compontes de react 
+
+
+-------------------------------------------
+
+let foo = function(){}
+let foo = () => {}
+
+let foo = function(item){}
+let foo = item => {}
+
+
+let foo = function(item){ return item * 2 }
+let foo = item => item * 2
+
+-------------------------------------------------
+
+Destructuring
+
+let arr = [1,2,3]
+
+let [uno,dos,tres] = arr
+
+let uno = arr[0]
+let dos = arr[1]
+let tres = arr[2]
+
+
+
+
+let obj = {x:1,y:2,z:3}
+
+let {x:x,y:y,z:z} = obj
+
+//Object Shorthand
+let {x,y,z} = obj
+
+let x = obj.x
+let y = obj.y
+let z = obj.z
+
+
+--------------------------------------------------
+
+https://github.com/HoracioGutierrez/curso-react.git
+https://docs.emmet.io/cheat-sheet/
+
+
+
+https://www.youtube.com/watch?v=pKJG6u2kuFw
+https://www.youtube.com/watch?v=Yvf_kUBZmXg
+
+https://www.youtube.com/channel/UCsBjURrPoezykLs9EqgamOA/videos
+
+https://github.com/HoracioGutierrez/jsinheritance
+https://github.com/HoracioGutierrez/jsinheritance/blob/master/translations/README.es.md
+
+
+
+https://medium.com/better-programming/understanding-the-this-keyword-in-javascript-cb76d4c7c5e8
+
+
+
+
